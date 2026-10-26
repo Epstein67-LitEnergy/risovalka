@@ -9,8 +9,20 @@ import org.example.view.MyPanel;
 import java.awt.*;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+public class Singleton {
+    private static Singleton instance;
 
-// TODO: Сделать singleton класс
+    private Singleton() {
+
+    }
+
+    public static synchronized Singleton getInstance() {
+        if (instance == null) {
+            instance = new Singleton();
+        }
+        return instance;
+    }
+}
 public class Controller {
     private final Model model;
     private final MyFrame frame;
