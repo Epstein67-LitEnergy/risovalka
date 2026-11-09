@@ -2,6 +2,8 @@ package org.example.controller;
 
 import org.example.model.Model;
 import org.example.model.MyShape;
+import org.example.model.factory.ShapeFactory;
+import org.example.model.factory.ShapeType;
 import org.example.model.fill.NoFill;
 import org.example.view.MyFrame;
 import org.example.view.MyPanel;
@@ -9,20 +11,7 @@ import org.example.view.MyPanel;
 import java.awt.*;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
-public class Singleton {
-    private static Singleton instance;
 
-    private Singleton() {
-
-    }
-
-    public static synchronized Singleton getInstance() {
-        if (instance == null) {
-            instance = new Singleton();
-        }
-        return instance;
-    }
-}
 public class Controller {
     private static Controller instance;
     private final Model model;
@@ -30,10 +19,13 @@ public class Controller {
     private final MyPanel panel;
     private Point2D firstPoint;
     private Point2D secondPoint;
+    private ShapeFactory shapeFactory;
+
     public Controller() {
         model = new Model();
-        MyShape shape = new MyShape(new Rectangle2D.Double());
-        shape.setFb(new NoFill());
+        shapeFactory=new ShapeFactory();
+
+        MyShape shape = shapeFactory.createShape(ShapeType.RECTANGULAR_SHAPE, Color.BLUE, true );
         model.setMyShape(shape);
 
         panel = new MyPanel(this);
@@ -42,6 +34,8 @@ public class Controller {
 
         frame = new MyFrame();
         frame.setPanel(panel);
+        panel.revalidate();
+        panel.repaint();
     }
 
     public static synchronized Controller getInstance( ) {
@@ -51,10 +45,16 @@ public class Controller {
         return instance;
 
     }
-    public void getPointOne(Point2D p){
+    public void mousePressed(Point2D p){
         firstPoint = p;
+        MyShape shape =shapeFactory.createShape(ShapeType.RECTANGULAR_SHAPE, Color.RED, false);
+        model.addShape(shape);
+        model.setDrawableShape(shape);
+        model.addShape(shape);
+
+
     }
-    public void getPointTwo(Point2D p){
+    public void mouseDragged(Point2D p){
         secondPoint = p;
         model.changeShape(firstPoint, secondPoint);
     }
