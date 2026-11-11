@@ -23,9 +23,9 @@ public class Controller {
 
     public Controller() {
         model = new Model();
-        shapeFactory=new ShapeFactory();
+        shapeFactory=ShapeFactory.getInstance();
 
-        MyShape shape = shapeFactory.createShape(ShapeType.RECTANGULAR_SHAPE, Color.BLUE, true );
+        MyShape shape = shapeFactory.createDefaultShape();
         model.setMyShape(shape);
 
         panel = new MyPanel(this);
@@ -47,7 +47,7 @@ public class Controller {
     }
     public void mousePressed(Point2D p){
         firstPoint = p;
-        MyShape shape =shapeFactory.createShape(ShapeType.RECTANGULAR_SHAPE, Color.RED, false);
+        MyShape shape =shapeFactory.createDefaultShape();
         model.addShape(shape);
         model.setDrawableShape(shape);
         model.addShape(shape);
