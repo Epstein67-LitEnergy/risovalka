@@ -15,12 +15,14 @@ public class ActionDraw implements AppAction{
     public ActionDraw(Model model) {
         this.model = model;
         shapeFactory = ShapeFactory.getInstance();
+        model.setDrawableShape(shapeFactory.createDefaultShape());
     }
 
     @Override
     public void mousePressed(Point point) {
         firstPoint = point;
         MyShape shape =shapeFactory.createDefaultShape();
+        model.setDrawableShape(shape);
         model.addShape(shape);
     }
 
