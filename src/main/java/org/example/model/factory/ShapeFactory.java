@@ -16,6 +16,7 @@ public class ShapeFactory {
 
     }
 
+
     public static  ShapeFactory getInstance(){
         synchronized (ShapeFactory.class) {
             if (instance == null) {

@@ -5,11 +5,14 @@ import org.example.controller.action.AppAction;
 import org.example.model.Model;
 import org.example.model.MyShape;
 import org.example.model.factory.ShapeFactory;
+import org.example.model.factory.ShapeState;
 import org.example.model.factory.ShapeType;
 import org.example.model.fill.NoFill;
+import org.example.view.MenuCreator;
 import org.example.view.MyFrame;
 import org.example.view.MyPanel;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
@@ -19,18 +22,26 @@ public class Controller {
     private final Model model;
     private final MyFrame frame;
     private final MyPanel panel;
-    private final AppAction action;
+    private AppAction action;
+    private ShapeState shapeState;
 
     public Controller() {
         model = new Model();
-        action = new ActionDraw(model);
 
         panel = new MyPanel(this);
-        // TODO: Поменять наблюдатель на более современную реализацию
         model.addObserver(panel);
 
+        shapeState = new ShapeState(ShapeType.RECTANGULAR_SHAPE, Color.RED, true);
+        action = new ActionDraw(model, shapeState);
         frame = new MyFrame();
         frame.setPanel(panel);
+
+        MenuCreator menuCreator = MenuCreator.getInstance();
+        menuCreator.setController(this);
+        menuCreator.setShapeState(shapeState);
+        JMenuBar menuBar = menuCreator.createMenu();
+        frame.setJMenuBar(menuBar);
+
         panel.revalidate();
         panel.repaint();
     }
@@ -52,5 +63,9 @@ public class Controller {
 
     public void draw(Graphics2D g2) {
         model.draw(g2);
+    }
+
+    public void switchActionDraw() {
+        action = new ActionDraw(model, shapeState);
     }
 }
