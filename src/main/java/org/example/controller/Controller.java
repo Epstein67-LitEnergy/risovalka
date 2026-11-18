@@ -39,8 +39,11 @@ public class Controller {
         MenuCreator menuCreator = MenuCreator.getInstance();
         menuCreator.setController(this);
         menuCreator.setShapeState(shapeState);
+
         JMenuBar menuBar = menuCreator.createMenu();
         frame.setJMenuBar(menuBar);
+        JToolBar jToolBar =menuCreator.crateToolBar(JToolBar.VERTICAL);
+        frame.add(jToolBar, BorderLayout.EAST);
 
         panel.revalidate();
         panel.repaint();
