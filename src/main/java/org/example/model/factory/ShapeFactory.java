@@ -14,6 +14,7 @@ public class ShapeFactory {
     public ShapeFactory() {
         defaultShape = new ShapeState(ShapeType.RECTANGULAR_SHAPE, Color.RED, false);
 
+
     }
 
 
