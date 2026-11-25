@@ -3,12 +3,9 @@ package org.example.view;
 import lombok.Setter;
 import org.example.controller.Controller;
 import org.example.controller.action.AppAction;
+import org.example.view.menu.*;
 import org.example.model.factory.ShapeState;
 import org.example.model.factory.ShapeType;
-import org.example.view.menu.AppCommand;
-import org.example.view.menu.CommandActionListener;
-import org.example.view.menu.SwitchFill;
-import org.example.view.menu.SwitchShape;
 
 import javax.swing.*;
 import java.awt.*;
@@ -29,6 +26,11 @@ public class MenuCreator {
 
     private  JRadioButtonMenuItem squareItem;
     private JRadioButtonMenuItem circleItem;
+
+    private JRadioButtonMenuItem drawItem;
+    private JRadioButtonMenuItem moveItem;
+
+    private JRadioButtonMenuItem rgbItem;
 
     private  MenuCreator() {
 
@@ -71,6 +73,16 @@ public class MenuCreator {
     private ArrayList<Action> createToolBarItems() {
         ArrayList<Action> menuItems = new ArrayList<>();
 
+        URL drawUrl = getClass().getClassLoader().getResource("ico/draw_16x16.png");
+        ImageIcon drawIco = drawUrl == null ? null : new ImageIcon(drawUrl);
+        AppCommand drawCommand = new SwitchAction(controller, SwitchAction.ActionType.DRAW, drawItem);
+        menuItems.add(new CommandActionListener("Рисовать", drawIco, drawCommand));
+
+        URL moveUrl = getClass().getClassLoader().getResource("ico/move_16x16.png");
+        ImageIcon moveIco = moveUrl == null ? null : new ImageIcon(moveUrl);
+        AppCommand moveCommand = new SwitchAction(controller, SwitchAction.ActionType.MOVE, moveItem);
+        menuItems.add(new CommandActionListener("Перемещать", moveIco, moveCommand));
+
         URL fillUrl = getClass().getClassLoader().getResource("ico/fill_16x16.png");
         ImageIcon fillIco = fillUrl == null ? null : new ImageIcon(fillUrl);
         AppCommand fillCommand = new SwitchFill(true, shapeState, fillItem, noFillItem);
@@ -91,6 +103,11 @@ public class MenuCreator {
         AppCommand circleCommand = new SwitchShape(shapeState, ShapeType.ELLIPSE_SHAPE, circleItem);
         menuItems.add(new CommandActionListener("Круг", circleIco, circleCommand));
 
+        URL rgbUrl = getClass().getClassLoader().getResource("ico/color_16x16.png");
+        ImageIcon rgbIco = rgbUrl == null ? null : new ImageIcon(rgbUrl);
+        AppCommand rgbCommand = new SwitchColor(shapeState, false, Color.BLACK, rgbItem);
+        menuItems.add(new CommandActionListener("Выбор цвета", rgbIco, rgbCommand));
+
         return menuItems;
     }
 
@@ -98,10 +115,16 @@ public class MenuCreator {
         ButtonGroup group = new ButtonGroup();
         JMenu actionMenu = new JMenu("Действие");
 
-        JRadioButtonMenuItem drawItem = new JRadioButtonMenuItem("Рисовать", true);
+        drawItem = new JRadioButtonMenuItem("Рисовать", true);
         drawItem.addActionListener(action -> controller.switchActionDraw());
         actionMenu.add(drawItem);
         group.add(drawItem);
+
+        moveItem = new JRadioButtonMenuItem("Перемещать");
+        moveItem.addActionListener(new CommandActionListener(
+                new SwitchAction(controller, SwitchAction.ActionType.MOVE, moveItem)));
+        actionMenu.add(moveItem);
+        group.add(moveItem);
 
         return actionMenu;
     }
@@ -120,9 +143,8 @@ public class MenuCreator {
         shapeMenu.add(blueItem);
         group.add(blueItem);
 
-        JRadioButtonMenuItem rgbItem = new JRadioButtonMenuItem("Выбор цвета");
+        rgbItem = new JRadioButtonMenuItem("Выбор цвета");
         rgbItem.addActionListener(action -> shapeState.setColor(JColorChooser.showDialog(null,"Выбор цвета", Color.BLACK)));
-
         shapeMenu.add(rgbItem);
         group.add(rgbItem);
 

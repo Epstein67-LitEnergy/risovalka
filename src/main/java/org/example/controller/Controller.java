@@ -1,6 +1,7 @@
 package org.example.controller;
 
 import org.example.controller.action.ActionDraw;
+import org.example.controller.action.ActionMove;
 import org.example.controller.action.AppAction;
 import org.example.model.Model;
 import org.example.model.MyShape;
@@ -70,5 +71,9 @@ public class Controller {
 
     public void switchActionDraw() {
         action = new ActionDraw(model, shapeState);
+    }
+
+    public void switchActionMove() {
+        action = new ActionMove(model);
     }
 }

@@ -5,6 +5,7 @@ import org.example.model.fill.FillBehavior;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RectangularShape;
@@ -52,6 +53,16 @@ public class MyShape {
 
     public void setFrame(Point2D x, Point2D y) {
         shape.setFrameFromDiagonal(x, y);
+    }
+
+    public boolean contains(Point point) {
+        return shape.contains(point);
+    }
+
+    public void translate(double dx, double dy) {
+        Rectangle2D frame = shape.getFrame();
+        shape.setFrame(frame.getX() + dx, frame.getY() + dy,
+                frame.getWidth(), frame.getHeight());
     }
 
     void draw(Graphics2D g) {
